@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <title>گرفتن اسکرین‌شات</title>
+</head>
+
+<body>
+    <h1>اسکرین‌شات از یک بخش خاص سایت</h1>
+    <form method="post">
+        <label>آدرس سایت:</label><br>
+        <input type="text" name="url" size="80" required><br><br>
+        <label>CSS Selector (مثلاً: div.elementor-widget-container):</label><br>
+        <input type="text" name="selector" size="50" required><br><br>
+        <button type="submit">گرفتن اسکرین‌شات</button>
+    </form>
+
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    {% if screenshot %}
+    <h2>تصویر گرفته‌شده:</h2>
+    <img src="{{ url_for('static', filename=screenshot) }}" style="max-width: 600px;">
+    {% endif %}
+</body>
+
+</html>
