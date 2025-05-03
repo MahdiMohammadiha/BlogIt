@@ -11,21 +11,27 @@ def index():
     screenshot_path = os.path.join("static", screenshot_rel_path)
     screenshot_exists = False
     error = None
+    comment = None
 
     if request.method == "POST":
         url = request.form["url"]
         selector = request.form["selector"]
+        index = request.form["index"]
 
-        success = take_screenshot(url, selector, screenshot_path)
+        if not index:
+            index = 1
+
+        success, comment = take_screenshot(url, selector, screenshot_path, index)
         if success:
             screenshot_exists = True
         else:
-            error = "Couldn't find the element or there was a problem saving the photo!"
+            error = "There was a problem saving the photo."
 
     return render_template(
         "index.html",
         screenshot=screenshot_rel_path if screenshot_exists else None,
         error=error,
+        comment=comment,
     )
 
 
