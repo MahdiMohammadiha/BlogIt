@@ -20,7 +20,7 @@ def index():
         if success:
             screenshot_exists = True
         else:
-            error = "نتوانستم عنصر مورد نظر را پیدا کنم یا مشکلی در ذخیره‌سازی عکس وجود داشت."
+            error = "Couldn't find the element or there was a problem saving the photo!"
 
     return render_template(
         "index.html",

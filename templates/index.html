@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>گرفتن اسکرین‌شات</title>
+    <title>Take screenshot</title>
 </head>
 
 <body>
-    <h1>اسکرین‌شات از یک بخش خاص سایت</h1>
+    <h1>Screenshot of a specific section of the site</h1>
     <form method="post">
-        <label>آدرس سایت:</label><br>
-        <input type="text" name="url" size="80" required><br><br>
-        <label>CSS Selector (مثلاً: div.elementor-widget-container):</label><br>
+        <label>URL:</label><br>
+        <input type="text" name="url" size="50" required><br><br>
+        <label>CSS Selector:</label><br>
         <input type="text" name="selector" size="50" required><br><br>
-        <button type="submit">گرفتن اسکرین‌شات</button>
+        <button type="submit" style="padding: 10px 15px;">Take screenshot</button>
     </form>
 
     {% if error %}
@@ -21,7 +21,7 @@
     {% endif %}
 
     {% if screenshot %}
-    <h2>تصویر گرفته‌شده:</h2>
+    <h2>Image:</h2>
     <img src="{{ url_for('static', filename=screenshot) }}" style="max-width: 600px;">
     {% endif %}
 </body>
