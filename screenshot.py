@@ -6,7 +6,19 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 
 
-def take_screenshot(url, selector, output_path):
+def __print_comment(comment):
+    print("screenshot.py =>", comment)
+
+
+def take_screenshot(url, selector, output_path, index=1, timeout=10):
+    try:
+        index = int(index)
+        timeout = int(timeout)
+    except ValueError:
+        comment = "Invalid inputs."
+        __print_comment(comment)
+        return False, comment
+
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
@@ -17,23 +29,37 @@ def take_screenshot(url, selector, output_path):
 
     try:
         wait = WebDriverWait(driver, 10)
-        element = wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, selector))
+        elements = wait.until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector))
         )
+
+        if not elements:
+            comment = "No elements found."
+            return False, comment
+
+        if index < 1 or index > len(elements):
+            comment = f"Index out of range. Found {len(elements)} element(s), but index is {index}."
+            return False, comment
+
+        element = elements[index - 1]  # 1-based index
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         if element.is_displayed():
             element.screenshot(output_path)
-            print("Screenshot saved.")
+            comment = "Screenshot saved."
             success = True
         else:
-            print("Element not visible.")
+            comment = "Element not visible."
             success = False
 
     except Exception as e:
-        print("Error:", e)
+        comment = "An error occurred."
+        __print_comment(f"Exception occurred: {type(e).__name__}.")
         success = False
 
-    driver.quit()
-    return success
+    finally:
+        driver.quit()
+        __print_comment(comment)
+
+    return success, comment
