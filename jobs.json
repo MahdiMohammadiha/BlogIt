@@ -1,0 +1,8 @@
+[
+  {
+    "url": "https://example.com",
+    "selector": "a",
+    "index": 1,
+    "output_path": "static/temp/screenshots/example1.png"
+  }
+]
