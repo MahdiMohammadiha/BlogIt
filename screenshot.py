@@ -7,37 +7,37 @@ from selenium.webdriver.support import expected_conditions as EC
 from login import login_livetse as LL
 from logger import print_console as PC
 from time import sleep
+from contextlib import closing
 
 
 FILE_NAME = os.path.basename(__file__)
 
 
-def take_screenshot(
-    url, selector, output_path, index=1, timeout=10, login_required=False
-):
+def save_screenshot(element, path):
+    element.screenshot(path)
+    return True, "Screenshot saved."
+
+
+def valid_inputs(url, selector, output_paths, indexes, timeout, login_required):
     try:
-        index = int(index)
         timeout = int(timeout)
     except ValueError:
-        comment = "Invalid inputs."
-        PC(FILE_NAME, comment)
-        return False, comment
+        PC(FILE_NAME, "Timeout must be an integer.")
+        return False
 
-    options = Options()
-    # options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--log-level=3")
+    if len(output_paths) != len(indexes):
+        PC(FILE_NAME, "The number of output paths must match the number of indexes.")
+        return False
 
-    driver = webdriver.Chrome(options=options)
-    driver.set_window_size(2560, 1440)
-    driver.get(url)
-    driver.execute_script("document.body.style.zoom='100%'")
+    if not url or not selector:
+        PC(FILE_NAME, "URL and selector cannot be empty.")
+        return False
 
+    return True
+
+
+def capture_element(driver, selector, output_path, index, timeout):
     wait = WebDriverWait(driver, timeout)
-
-    if login_required:
-        LL(driver)
 
     try:
         elements = wait.until(
@@ -45,33 +45,72 @@ def take_screenshot(
         )
 
         if not elements:
-            comment = "No elements found."
-            return False, comment
+            message = "No elements found."
+            return False, message
 
         if index < 1 or index > len(elements):
-            comment = f"Index out of range. Found {len(elements)} element(s), but index is {index}."
-            return False, comment
+            message = f"Index out of range. Found {len(elements)} element(s), but index is {index}."
+            return False, message
 
         element = elements[index - 1]  # 1-based index
 
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)  # check & create path
 
         if element.is_displayed():
             sleep(10)
-            element.screenshot(output_path)
-            comment = "Screenshot saved."
-            success = True
+            success, message = save_screenshot(element, output_path)
         else:
-            comment = "Element not visible."
+            message = "Element not visible."
             success = False
 
     except Exception as e:
-        comment = "An error occurred."
-        PC(FILE_NAME, f"Exception occurred: {type(e).__name__}.")
+        message = f"Exception occurred: {type(e).__name__}."
         success = False
 
-    finally:
-        driver.quit()
-        PC(FILE_NAME, comment)
+    return success, message
 
-    return success, comment
+
+def setup_driver():
+    options = Options()
+    # options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--log-level=3")
+    return webdriver.Chrome(options=options)
+
+
+def take_screenshot(
+    url: str,
+    selector: str,
+    output_paths: list[str],
+    indexes: list[int] = [1],
+    timeout: int = 10,
+    login_required: bool = False,
+) -> list[tuple[bool, str]]:
+
+    if not valid_inputs(url, selector, output_paths, indexes, timeout, login_required):
+        return [(False, "Invalid inputs.")]
+
+    with closing(setup_driver()) as driver:
+        driver.set_window_size(2560, 1440)
+        driver.get(url)
+        driver.execute_script("document.body.style.zoom='100%'")
+
+        # if login_required:
+        if True:
+            LL(driver)
+
+        results = []
+
+        for index, output_path in zip(indexes, output_paths):
+            success, message = capture_element(
+                driver, selector, output_path, index, timeout
+            )
+            PC(FILE_NAME, message)
+            results.append((success, message))
+
+    return results
+
+
+if __name__ == "__main__":
+    pass
