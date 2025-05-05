@@ -1,35 +1,45 @@
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import os
+from login import login_livetse as LL
+from logger import print_console as PC
+from time import sleep
 
 
-def __print_comment(comment):
-    print("screenshot.py =>", comment)
+FILE_NAME = os.path.basename(__file__)
 
 
-def take_screenshot(url, selector, output_path, index=1, timeout=10):
+def take_screenshot(
+    url, selector, output_path, index=1, timeout=10, login_required=False
+):
     try:
         index = int(index)
         timeout = int(timeout)
     except ValueError:
         comment = "Invalid inputs."
-        __print_comment(comment)
+        PC(FILE_NAME, comment)
         return False, comment
 
     options = Options()
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--log-level=3")
 
     driver = webdriver.Chrome(options=options)
+    driver.set_window_size(2560, 1440)
     driver.get(url)
+    driver.execute_script("document.body.style.zoom='100%'")
+
+    wait = WebDriverWait(driver, timeout)
+
+    if login_required:
+        LL(driver)
 
     try:
-        wait = WebDriverWait(driver, 10)
         elements = wait.until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector))
         )
@@ -47,6 +57,7 @@ def take_screenshot(url, selector, output_path, index=1, timeout=10):
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         if element.is_displayed():
+            sleep(10)
             element.screenshot(output_path)
             comment = "Screenshot saved."
             success = True
@@ -56,11 +67,11 @@ def take_screenshot(url, selector, output_path, index=1, timeout=10):
 
     except Exception as e:
         comment = "An error occurred."
-        __print_comment(f"Exception occurred: {type(e).__name__}.")
+        PC(FILE_NAME, f"Exception occurred: {type(e).__name__}.")
         success = False
 
     finally:
         driver.quit()
-        __print_comment(comment)
+        PC(FILE_NAME, comment)
 
     return success, comment
