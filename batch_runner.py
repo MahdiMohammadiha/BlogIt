@@ -12,11 +12,12 @@ for i, job in enumerate(jobs, 1):
     selector = job.get("selector")
     output_path = job.get("output_path")
     index = job.get("index", 1)
+    login_required = job.get("login_required", False)
 
     if not all([url, selector, output_path]):
         print(f"❌ Job #{i}: Invalid job definition.")
         continue
 
     print(f"🔍 Job #{i}: Taking screenshot from {url} ...")
-    success, comment = take_screenshot(url, selector, output_path, index=index)
+    success, comment = take_screenshot(url, selector, output_path, index=index, login_required=login_required)
     print(f"{'✅' if success else '❌'} {comment}\n")
