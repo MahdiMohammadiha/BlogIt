@@ -1,8 +1,93 @@
 [
   {
-    "url": "https://example.com",
-    "selector": "a",
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
     "index": 1,
-    "output_path": "static/temp/screenshots/example1.png"
+    "output_path": "static/temp/screenshots/livetse1.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 2,
+    "output_path": "static/temp/screenshots/livetse2.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 3,
+    "output_path": "static/temp/screenshots/livetse3.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 4,
+    "output_path": "static/temp/screenshots/livetse4.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 5,
+    "output_path": "static/temp/screenshots/livetse5.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 6,
+    "output_path": "static/temp/screenshots/livetse6.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 7,
+    "output_path": "static/temp/screenshots/livetse7.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 8,
+    "output_path": "static/temp/screenshots/livetse8.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 9,
+    "output_path": "static/temp/screenshots/livetse9.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 10,
+    "output_path": "static/temp/screenshots/livetse10.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 11,
+    "output_path": "static/temp/screenshots/livetse11.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 12,
+    "output_path": "static/temp/screenshots/livetse12.png",
+    "login_required": true
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "index": 14,
+    "output_path": "static/temp/screenshots/livetse13.png",
+    "login_required": true
   }
 ]
