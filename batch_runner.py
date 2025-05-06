@@ -4,8 +4,16 @@ from screenshot import take_screenshot
 
 JOBS_FILE = "jobs.json"
 
+if not os.path.exists(JOBS_FILE):
+    print(f"❌ Error: Jobs file '{JOBS_FILE}' not found.")
+    exit(1)
+
 with open(JOBS_FILE, "r", encoding="utf-8") as f:
-    jobs = json.load(f)
+    try:
+        jobs = json.load(f)
+    except json.JSONDecodeError:
+        print(f"❌ Error: Jobs file '{JOBS_FILE}' is not a valid JSON file.")
+        exit(1)
 
 for i, job in enumerate(jobs, 1):
     url = job.get("url")
