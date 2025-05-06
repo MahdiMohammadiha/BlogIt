@@ -1,26 +1,36 @@
 > Todo:
 >
->       [ ] Add nahayatnegar market map to jobs
+>       [X] Add nahayatnegar market map to jobs
 >
 >       [ ] Setup selenium to select filters in nahayatnegar
 
 > Feture:
 >
->       [ ] Add data type check for take_screenshot function in screenshot.py
+>       [X] Implement valid_inputs() for take_screenshot()
 >
->       [x] Implement valid_inputs() for take_screenshot()
+>       [X] Add data type check for take_screenshot function in screenshot.py
 >
 >       [ ] Add auto path logic if one path and multiple indexes given
 
-> Fix:
+> Improvement:
 >
->       [ ] Passing actual login_required value to take_screenshot()
->
->       [ ] Print batch_runner log in console
->
->       [ ] Image index 4 & 5 in livetse site
+>       [ ] Improve logger.py logging messages to show success status
 >
 >       [ ] Replace sleep() with wait() for element in capture_element()
+>
+>       [ ] Add try, except for login_livetse()
+>
+>       [ ] Add index to multi screenshot log in batch_runner.py for better readability
+
+> Fix:
+>
+>       [X] Passing actual login_required value to take_screenshot()
+>
+>       [X] Print batch_runner log in console supporting tuple format
+>
+>       [ ] Image index 4 & 5 & 6 in livetse site
+>
+>       [ ] Function sleep() in take_screenshot() should run once for each driver session
 
 > Note:
 >
