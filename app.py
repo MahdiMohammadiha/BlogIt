@@ -2,10 +2,11 @@ from flask import Flask, render_template, request
 from screenshot import take_screenshot
 import os
 
+
 app = Flask(__name__)
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/screenshot-panel", methods=["GET", "POST"])
 def index():
     screenshot_rel_path = "temp/screenshots/screenshot.png"
     screenshot_path = os.path.join("static", screenshot_rel_path)
