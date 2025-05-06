@@ -96,8 +96,7 @@ def take_screenshot(
         driver.get(url)
         driver.execute_script("document.body.style.zoom='100%'")
 
-        # if login_required:
-        if True:
+        if login_required:
             LL(driver)
 
         results = []
