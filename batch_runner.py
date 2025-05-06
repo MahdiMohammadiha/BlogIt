@@ -19,5 +19,15 @@ for i, job in enumerate(jobs, 1):
         continue
 
     print(f"🔍 Job #{i}: Taking screenshot from {url} ...")
-    result = take_screenshot(url, selector, output_paths, indexes, login_required)
-    print(f"{result}\n")
+    result = take_screenshot(
+        url,
+        selector,
+        output_paths=output_paths,
+        indexes=indexes,
+        login_required=login_required,
+    )
+
+    for success, message in result:
+        status = "✅ Success" if success else "❌ Failed"
+        print(f"{status}: {message}")
+    print("\n")
