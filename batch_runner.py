@@ -10,14 +10,14 @@ with open(JOBS_FILE, "r", encoding="utf-8") as f:
 for i, job in enumerate(jobs, 1):
     url = job.get("url")
     selector = job.get("selector")
-    output_path = job.get("output_path")
-    indexes = job.get("indexes")
-    login_required = job.get("login_required")
+    output_paths = job.get("output_paths", ["static/temp/screenshots/unnamed.png"])
+    indexes = job.get("indexes", [1])
+    login_required = job.get("login_required", False)
 
-    if not all([url, selector, output_path]):
+    if not all([url, selector, output_paths]):
         print(f"❌ Job #{i}: Invalid job definition.")
         continue
 
     print(f"🔍 Job #{i}: Taking screenshot from {url} ...")
-    result = take_screenshot(url, selector, output_path, indexes, login_required)
+    result = take_screenshot(url, selector, output_paths, indexes, login_required)
     print(f"{result}\n")
