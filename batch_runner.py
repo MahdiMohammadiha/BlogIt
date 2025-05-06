@@ -15,6 +15,9 @@ with open(JOBS_FILE, "r", encoding="utf-8") as f:
         print(f"❌ Error: Jobs file '{JOBS_FILE}' is not a valid JSON file.")
         exit(1)
 
+success_count = 0
+failure_count = 0
+
 for i, job in enumerate(jobs, 1):
     url = job.get("url")
     selector = job.get("selector")
@@ -38,4 +41,11 @@ for i, job in enumerate(jobs, 1):
     for success, message in result:
         status = "✅ Success" if success else "❌ Failed"
         print(f"{status}: {message}")
+        if success:
+            success_count += 1
+        else:
+            failure_count += 1
     print("\n")
+
+print(f"✅ Total Success: {success_count}")
+print(f"❌ Total Failures: {failure_count}")
