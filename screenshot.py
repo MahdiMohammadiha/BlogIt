@@ -2,7 +2,7 @@ import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from login import login_livetse as LL
 from logger import print_console as PC
@@ -13,12 +13,29 @@ from contextlib import closing
 FILE_NAME = os.path.basename(__file__)
 
 
+def perform_pre_actions(driver, pre_actions, timeout=10):
+    wait = WebDriverWait(driver, timeout)
+    for action in pre_actions:
+        try:
+            if action["type"] == "select":
+                select_element = wait.until(
+                    EC.presence_of_element_located((By.ID, action["select_id"]))
+                )
+                select_obj = Select(select_element)
+                select_obj.select_by_visible_text(action["option_text"])
+                sleep(1)
+        except Exception as e:
+            PC(FILE_NAME, f"Pre-action failed: {type(e).__name__}.")
+
+
 def save_screenshot(element, path):
     element.screenshot(path)
     return True, "Screenshot saved."
 
 
-def valid_inputs(url, selector, output_paths, indexes, timeout, login_required):
+def valid_inputs(
+    url, selector, output_paths, indexes, timeout, login_required, pre_actions
+):
     try:
         timeout = int(timeout)
     except ValueError:
@@ -31,6 +48,14 @@ def valid_inputs(url, selector, output_paths, indexes, timeout, login_required):
 
     if not url or not selector:
         PC(FILE_NAME, "URL and selector cannot be empty.")
+        return False
+
+    if not isinstance(pre_actions, list):
+        PC(FILE_NAME, "Pre action must be a list.")
+        return False
+
+    if not isinstance(login_required, bool):
+        PC(FILE_NAME, "Login must be a boolean.")
         return False
 
     return True
@@ -70,13 +95,19 @@ def capture_element(driver, selector, output_path, index, timeout):
     return success, message
 
 
-def setup_driver():
+def setup_session():
     options = Options()
     # options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--log-level=3")
     return webdriver.Chrome(options=options)
+
+
+def setup_deriver(driver, url):
+    driver.set_window_size(2560, 1440)
+    driver.get(url)
+    driver.execute_script("document.body.style.zoom='100%'")
 
 
 def take_screenshot(
@@ -86,18 +117,22 @@ def take_screenshot(
     indexes: list[int] = [1],
     timeout: int = 10,
     login_required: bool = False,
+    pre_actions: list[dict] = [],
 ) -> list[tuple[bool, str]]:
 
-    if not valid_inputs(url, selector, output_paths, indexes, timeout, login_required):
+    if not valid_inputs(
+        url, selector, output_paths, indexes, timeout, login_required, pre_actions
+    ):
         return [(False, "Invalid inputs.")]
 
-    with closing(setup_driver()) as driver:
-        driver.set_window_size(2560, 1440)
-        driver.get(url)
-        driver.execute_script("document.body.style.zoom='100%'")
+    with closing(setup_session()) as driver:
+        setup_deriver(driver, url)
 
         if login_required:
             LL(driver)
+
+        if pre_actions:
+            perform_pre_actions(driver, pre_actions, timeout)
 
         results = []
 
