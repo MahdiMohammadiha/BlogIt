@@ -23,6 +23,8 @@
 >       [ ] Add index to multi screenshot log in batch_runner.py for better readability
 >
 >       [ ] Add url (the name in the url) to default path while saving image in batch_runner.py
+>
+>       [ ] Crop LiveTSE image paddings
 
 > Fix:
 >
@@ -30,7 +32,7 @@
 >
 >       [X] Print batch_runner log in console supporting tuple format
 >
->       [ ] Image index 4 & 5 & 6 in livetse site
+>       [X] Image index 4 & 5 & 6 in LiveTSE web site
 >
 >       [X] Function sleep() in take_screenshot() should run once for each driver session
 
