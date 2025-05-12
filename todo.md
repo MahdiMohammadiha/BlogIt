@@ -3,6 +3,10 @@
 >       [X] Add nahayatnegar market map to jobs
 >
 >       [X] Setup selenium to select filters in nahayatnegar
+>
+>       [ ] Add LiveTSE blog texts as template
+>
+>       [ ] Implementing a text content update system
 
 > Feture:
 >
