@@ -61,7 +61,9 @@ def perform_pre_actions(driver, pre_actions, timeout=10):
             PC(FILE_NAME, f"Pre-action failed: {type(e).__name__}.")
 
 
-def capture_element(driver, selector, output_path, index, timeout, is_first_screenshot):
+def capture_element(
+    driver, selector, output_path, index, timeout, scroll_into_view, is_first_screenshot
+):
     wait = WebDriverWait(driver, timeout)
 
     try:
@@ -82,6 +84,10 @@ def capture_element(driver, selector, output_path, index, timeout, is_first_scre
         os.makedirs(os.path.dirname(output_path), exist_ok=True)  # check & create path
 
         if element.is_displayed():
+            if scroll_into_view:
+                driver.execute_script(
+                    "arguments[0].scrollIntoView({block: 'center'});", element
+                )
             if is_first_screenshot:
                 sleep(10)
             else:
@@ -120,7 +126,8 @@ def take_screenshot(
     indexes: list[int] = [1],
     timeout: int = 10,
     login_required: bool = False,
-    pre_actions: list[dict] = [],
+    scroll_into_view: bool = False,
+    pre_actions: list[dict] = []
 ) -> list[tuple[bool, str]]:
 
     if not valid_inputs(
@@ -142,7 +149,13 @@ def take_screenshot(
 
         for index, output_path in zip(indexes, output_paths):
             success, message = capture_element(
-                driver, selector, output_path, index, timeout
+                driver=driver,
+                selector=selector,
+                output_path=output_path,
+                index=index,
+                timeout=timeout,
+                scroll_into_view=scroll_into_view,
+                is_first_screenshot=is_first_screenshot,
             )
             is_first_screenshot = False
             PC(FILE_NAME, message)
