@@ -2,7 +2,9 @@ import json
 import os
 from screenshot import take_screenshot
 
+
 JOBS_FILE = "jobs.json"
+
 
 if not os.path.exists(JOBS_FILE):
     print(f"❌ Error: Jobs file '{JOBS_FILE}' not found.")
@@ -24,6 +26,7 @@ for i, job in enumerate(jobs, 1):
     output_paths = job.get("output_paths", ["static/temp/screenshots/unnamed.png"])
     indexes = job.get("indexes", [1])
     login_required = job.get("login_required", False)
+    pre_actions = job.get("pre_actions", [])
 
     if not all([url, selector, output_paths]):
         print(f"❌ Job #{i}: Invalid job definition.")
@@ -36,6 +39,7 @@ for i, job in enumerate(jobs, 1):
         output_paths=output_paths,
         indexes=indexes,
         login_required=login_required,
+        pre_actions=pre_actions,
     )
 
     for success, message in result:
