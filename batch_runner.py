@@ -26,6 +26,7 @@ for i, job in enumerate(jobs, 1):
     output_paths = job.get("output_paths", ["static/temp/screenshots/unnamed.png"])
     indexes = job.get("indexes", [1])
     login_required = job.get("login_required", False)
+    scroll_into_view = job.get("scroll_into_view", False)
     pre_actions = job.get("pre_actions", [])
 
     if not all([url, selector, output_paths]):
@@ -39,7 +40,8 @@ for i, job in enumerate(jobs, 1):
         output_paths=output_paths,
         indexes=indexes,
         login_required=login_required,
-        pre_actions=pre_actions,
+        scroll_into_view=scroll_into_view,
+        pre_actions=pre_actions
     )
 
     for success, message in result:
