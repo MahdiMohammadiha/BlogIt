@@ -5,6 +5,7 @@
     "indexes": [1],
     "output_paths": ["static/temp/screenshots/nahayatnegar.png"],
     "login_required": false,
+    "scroll_into_view": false,
     "pre_actions": [
       {
         "type": "select",
@@ -47,6 +48,8 @@
       "static/temp/screenshots/livetse12.png",
       "static/temp/screenshots/livetse13.png"
     ],
-    "login_required": true
+    "login_required": true,
+    "scroll_into_view": true,
+    "pre_actions": []
   }
 ]
