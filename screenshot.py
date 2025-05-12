@@ -61,7 +61,7 @@ def perform_pre_actions(driver, pre_actions, timeout=10):
             PC(FILE_NAME, f"Pre-action failed: {type(e).__name__}.")
 
 
-def capture_element(driver, selector, output_path, index, timeout):
+def capture_element(driver, selector, output_path, index, timeout, is_first_screenshot):
     wait = WebDriverWait(driver, timeout)
 
     try:
@@ -82,7 +82,10 @@ def capture_element(driver, selector, output_path, index, timeout):
         os.makedirs(os.path.dirname(output_path), exist_ok=True)  # check & create path
 
         if element.is_displayed():
-            sleep(10)
+            if is_first_screenshot:
+                sleep(10)
+            else:
+                sleep(1)
             success, message = save_screenshot(element, output_path)
         else:
             message = "Element not visible."
@@ -135,11 +138,13 @@ def take_screenshot(
             perform_pre_actions(driver, pre_actions, timeout)
 
         results = []
+        is_first_screenshot = True
 
         for index, output_path in zip(indexes, output_paths):
             success, message = capture_element(
                 driver, selector, output_path, index, timeout
             )
+            is_first_screenshot = False
             PC(FILE_NAME, message)
             results.append((success, message))
 
