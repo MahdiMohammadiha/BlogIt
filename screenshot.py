@@ -13,26 +13,6 @@ from contextlib import closing
 FILE_NAME = os.path.basename(__file__)
 
 
-def perform_pre_actions(driver, pre_actions, timeout=10):
-    wait = WebDriverWait(driver, timeout)
-    for action in pre_actions:
-        try:
-            if action["type"] == "select":
-                select_element = wait.until(
-                    EC.presence_of_element_located((By.ID, action["select_id"]))
-                )
-                select_obj = Select(select_element)
-                select_obj.select_by_visible_text(action["option_text"])
-                sleep(1)
-        except Exception as e:
-            PC(FILE_NAME, f"Pre-action failed: {type(e).__name__}.")
-
-
-def save_screenshot(element, path):
-    element.screenshot(path)
-    return True, "Screenshot saved."
-
-
 def valid_inputs(
     url, selector, output_paths, indexes, timeout, login_required, pre_actions
 ):
@@ -59,6 +39,26 @@ def valid_inputs(
         return False
 
     return True
+
+
+def save_screenshot(element, path):
+    element.screenshot(path)
+    return True, "Screenshot saved."
+
+
+def perform_pre_actions(driver, pre_actions, timeout=10):
+    wait = WebDriverWait(driver, timeout)
+    for action in pre_actions:
+        try:
+            if action["type"] == "select":
+                select_element = wait.until(
+                    EC.presence_of_element_located((By.ID, action["select_id"]))
+                )
+                select_obj = Select(select_element)
+                select_obj.select_by_visible_text(action["option_text"])
+                sleep(1)
+        except Exception as e:
+            PC(FILE_NAME, f"Pre-action failed: {type(e).__name__}.")
 
 
 def capture_element(driver, selector, output_path, index, timeout):
@@ -147,4 +147,4 @@ def take_screenshot(
 
 
 if __name__ == "__main__":
-    pass
+    print(FILE_NAME)
