@@ -32,7 +32,7 @@
 >
 >       [ ] Image index 4 & 5 & 6 in livetse site
 >
->       [ ] Function sleep() in take_screenshot() should run once for each driver session
+>       [X] Function sleep() in take_screenshot() should run once for each driver session
 
 > Note:
 >
