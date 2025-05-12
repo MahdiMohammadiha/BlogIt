@@ -2,7 +2,7 @@
 >
 >       [X] Add nahayatnegar market map to jobs
 >
->       [ ] Setup selenium to select filters in nahayatnegar
+>       [X] Setup selenium to select filters in nahayatnegar
 
 > Feture:
 >
@@ -21,6 +21,8 @@
 >       [ ] Add try, except for login_livetse()
 >
 >       [ ] Add index to multi screenshot log in batch_runner.py for better readability
+>
+>       [ ] Add url (the name in the url) to default path while saving image in batch_runner.py
 
 > Fix:
 >
