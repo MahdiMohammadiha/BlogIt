@@ -1,11 +1,30 @@
 [
   {
+    "url": "https://old.tsetmc.com/Loader.aspx?ParTree=15",
+    "selector": "div.header",
+    "indexes": [1, 6],
+    "output_paths": [
+      "static/temp/screenshots/tsetmc-header1.png",
+      "static/temp/screenshots/tsetmc-header2.png"
+    ],
+    "scroll_into_view": true
+  },
+  {
+    "url": "https://old.tsetmc.com/Loader.aspx?ParTree=15",
+    "selector": "div.content",
+    "indexes": [1, 6],
+    "output_paths": [
+      "static/temp/screenshots/tsetmc-content1.png",
+      "static/temp/screenshots/tsetmc-content2.png"
+    ],
+    "scroll_into_view": true
+  },
+  {
     "url": "https://www.nahayatnegar.com/marketmap",
     "selector": "div.row.collapse.marketmap",
     "indexes": [1],
     "output_paths": ["static/temp/screenshots/nahayatnegar.png"],
-    "login_required": false,
-    "scroll_into_view": false,
+    "delay": 5,
     "pre_actions": [
       {
         "type": "select",
@@ -48,6 +67,7 @@
       "static/temp/screenshots/livetse12.png",
       "static/temp/screenshots/livetse13.png"
     ],
+    "delay": 10,
     "login_required": true,
     "scroll_into_view": true,
     "pre_actions": []
