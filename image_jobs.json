@@ -1,0 +1,18 @@
+[
+  {
+    "img1_path": "static/temp/screenshots/tsetmc-header1.png",
+    "img2_path": "static/temp/screenshots/tsetmc-content1.png",
+    "output_path": "static/temp/screenshots/tsetmc1.png",
+    "gap_size": 5,
+    "gap_color": "#FFFFFF",
+    "direction": "down"
+  },
+  {
+    "img1_path": "static/temp/screenshots/tsetmc-header2.png",
+    "img2_path": "static/temp/screenshots/tsetmc-content2.png",
+    "output_path": "static/temp/screenshots/tsetmc2.png",
+    "gap_size": 5,
+    "gap_color": "#FFFFFF",
+    "direction": "down"
+  }
+]
