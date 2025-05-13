@@ -91,15 +91,15 @@ def capture_element(
         os.makedirs(os.path.dirname(output_path), exist_ok=True)  # check & create path
 
         if element.is_displayed():
-            if is_first_screenshot:
-                sleep(delay)
-            else:
-                sleep(0.5)  # Give it time to stabilize
-
             if scroll_into_view:
                 driver.execute_script(
                     "arguments[0].scrollIntoView({block: 'center'});", element
                 )
+
+            if is_first_screenshot:
+                sleep(delay)
+            else:
+                sleep(0.5)  # Give it time to stabilize
 
             success, message = save_screenshot(element, output_path)
 
