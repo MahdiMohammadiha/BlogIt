@@ -7,6 +7,8 @@
 >       [ ] Add LiveTSE blog texts as template
 >
 >       [ ] Implementing a text content update system
+>
+>       [ ] Implementing image merging capability
 
 > Feture:
 >
@@ -45,3 +47,5 @@
 >       - Option "headless" is disabled in take_screenshot()
 >
 >       - Module driver.quit() replaced by closing from contextlib
+>
+>       - Option 'timeout' is implemented in take_screenshot() but it's not supported by batch_runner.py 
