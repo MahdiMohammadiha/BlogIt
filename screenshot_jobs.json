@@ -1,0 +1,75 @@
+[
+  {
+    "url": "https://old.tsetmc.com/Loader.aspx?ParTree=15",
+    "selector": "div.header",
+    "indexes": [1, 6],
+    "output_paths": [
+      "static/temp/screenshots/tsetmc-header1.png",
+      "static/temp/screenshots/tsetmc-header2.png"
+    ],
+    "scroll_into_view": true
+  },
+  {
+    "url": "https://old.tsetmc.com/Loader.aspx?ParTree=15",
+    "selector": "div.content",
+    "indexes": [1, 6],
+    "output_paths": [
+      "static/temp/screenshots/tsetmc-content1.png",
+      "static/temp/screenshots/tsetmc-content2.png"
+    ],
+    "scroll_into_view": true
+  },
+  {
+    "url": "https://www.nahayatnegar.com/marketmap",
+    "selector": "div.row.collapse.marketmap",
+    "indexes": [1],
+    "output_paths": ["static/temp/screenshots/nahayatnegar.png"],
+    "delay": 5,
+    "pre_actions": [
+      {
+        "type": "select",
+        "select_id": "marketmap-industry",
+        "option_text": "فقط سهام"
+      },
+      {
+        "type": "select",
+        "select_id": "marketmap-type",
+        "option_text": "ارزش معاملات"
+      },
+      {
+        "type": "select",
+        "select_id": "marketmap-date",
+        "option_text": "1 هفته"
+      },
+      {
+        "type": "select",
+        "select_id": "marketmap-date",
+        "option_text": "روز"
+      }
+    ]
+  },
+  {
+    "url": "https://app.livetse.ir/livechart",
+    "selector": "div.col",
+    "indexes": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14],
+    "output_paths": [
+      "static/temp/screenshots/livetse1.png",
+      "static/temp/screenshots/livetse2.png",
+      "static/temp/screenshots/livetse3.png",
+      "static/temp/screenshots/livetse4.png",
+      "static/temp/screenshots/livetse5.png",
+      "static/temp/screenshots/livetse6.png",
+      "static/temp/screenshots/livetse7.png",
+      "static/temp/screenshots/livetse8.png",
+      "static/temp/screenshots/livetse9.png",
+      "static/temp/screenshots/livetse10.png",
+      "static/temp/screenshots/livetse11.png",
+      "static/temp/screenshots/livetse12.png",
+      "static/temp/screenshots/livetse13.png"
+    ],
+    "delay": 10,
+    "login_required": true,
+    "scroll_into_view": true,
+    "pre_actions": []
+  }
+]
