@@ -23,8 +23,9 @@ failure_count = 0
 for i, job in enumerate(jobs, 1):
     url = job.get("url")
     selector = job.get("selector")
-    output_paths = job.get("output_paths", ["static/temp/screenshots/unnamed.png"])
     indexes = job.get("indexes", [1])
+    output_paths = job.get("output_paths", ["static/temp/screenshots/unnamed.png"])
+    delay = job.get("delay", 1)
     login_required = job.get("login_required", False)
     scroll_into_view = job.get("scroll_into_view", False)
     pre_actions = job.get("pre_actions", [])
@@ -37,8 +38,9 @@ for i, job in enumerate(jobs, 1):
     result = take_screenshot(
         url,
         selector,
-        output_paths=output_paths,
         indexes=indexes,
+        output_paths=output_paths,
+        delay=delay,
         login_required=login_required,
         scroll_into_view=scroll_into_view,
         pre_actions=pre_actions
