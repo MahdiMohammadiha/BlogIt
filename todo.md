@@ -8,7 +8,7 @@
 >
 >       [ ] Implementing a text content update system
 >
->       [ ] Implementing image merging capability
+>       [X] Implementing image merging capability
 
 > Feture:
 >
@@ -31,6 +31,12 @@
 >       [ ] Add url (the name in the url) to default path while saving image in batch_runner.py
 >
 >       [ ] Crop LiveTSE image paddings
+>
+>       [ ] Package tools
+>
+>       [ ] Add input validation and try-except to merge_images_with_gap()
+>
+>       [ ] Improve print statements in batch_runner.py and pass messages to print_console()
 
 > Fix:
 >
