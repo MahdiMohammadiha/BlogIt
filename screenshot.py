@@ -114,19 +114,18 @@ def capture_element(
     return success, message
 
 
-def setup_session():
+def setup_deriver(url):
     options = Options()
     # options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--log-level=3")
-    return webdriver.Chrome(options=options)
-
-
-def setup_deriver(driver, url):
+    driver = webdriver.Chrome(options=options)
     driver.set_window_size(2560, 1440)
     driver.get(url)
+    driver.maximize_window()
     driver.execute_script("document.body.style.zoom='100%'")
+    return driver
 
 
 def take_screenshot(
@@ -146,9 +145,7 @@ def take_screenshot(
     ):
         return [(False, "Invalid inputs.")]
 
-    with closing(setup_session()) as driver:
-        setup_deriver(driver, url)
-
+    with closing(setup_deriver(url)) as driver:
         if login_required:
             LL(driver)
 
