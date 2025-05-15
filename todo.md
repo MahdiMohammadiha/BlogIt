@@ -55,6 +55,8 @@
 >       [X] Function sleep() in take_screenshot() should run once for each driver session
 >
 >       [ ] Fix screenshots from LiveTSE charts when --headless option is disabled
+>
+>       [ ] Fix img html style for LiveTSE images
 
 > Note:
 >
