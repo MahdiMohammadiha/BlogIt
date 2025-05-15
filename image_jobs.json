@@ -14,5 +14,13 @@
     "gap_size": 5,
     "gap_color": "#FFFFFF",
     "direction": "down"
+  },
+  {
+    "img1_path": "static/temp/screenshots/tsetmc1.png",
+    "img2_path": "static/temp/screenshots/tsetmc2.png",
+    "output_path": "static/temp/screenshots/tsetmc.png",
+    "gap_size": 0,
+    "gap_color": "#FFFFFF",
+    "direction": "down"
   }
 ]
