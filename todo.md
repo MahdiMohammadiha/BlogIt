@@ -21,6 +21,8 @@
 >       [X] Add data type check for take_screenshot function in screenshot.py
 >
 >       [ ] Add auto path logic if one path and multiple indexes given
+>
+>       [ ] Implement image scale feture for smaller scales in blog.html
 
 > Improvement:
 >
