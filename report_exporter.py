@@ -62,7 +62,7 @@ def livetse_market_report(driver):
         .replace("amp;amp;", "")
     )
 
-    with open("market_report.html", "w", encoding="utf-8") as f:
+    with open("templates/market_report.html", "w", encoding="utf-8") as f:
         f.write(clean_html)
 
 
