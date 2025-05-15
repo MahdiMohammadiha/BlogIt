@@ -15,7 +15,8 @@ def setup_driver():
     return driver
 
 
-def livetse_market_report(driver):
+def livetse_market_report():
+    driver = setup_driver()
     driver.get("https://app.livetse.ir/notification?mode=export_html")
 
     login_livetse(driver)
@@ -65,16 +66,12 @@ def livetse_market_report(driver):
     with open("templates/market_report.html", "w", encoding="utf-8") as f:
         f.write(clean_html)
 
+        driver.quit()
+
 
 def main():
-    driver = setup_driver()
-
-    try:
-        livetse_market_report(driver)
-        print("Market report has been successfully saved.")
-
-    finally:
-        driver.quit()
+    livetse_market_report()
+    print("Market report has been successfully saved.")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, render_template
 from jdatetime import date
-from report_exporter import livetse_market_report, setup_driver
+from report_exporter import livetse_market_report
 
 
 app = Flask(__name__)
@@ -13,8 +13,7 @@ def index():
 
 @app.route("/blog")
 def blog():
-    driver = setup_driver()
-    livetse_market_report(driver)
+    livetse_market_report()
 
     today = date.today()
     jalali_date = today.strftime("%d %B %Y")
