@@ -9,7 +9,7 @@ from time import sleep
 def setup_driver():
     """Set up the Selenium WebDriver."""
     options = webdriver.ChromeOptions()
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
     driver.maximize_window()
     return driver
