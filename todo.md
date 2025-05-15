@@ -4,11 +4,15 @@
 >
 >       [X] Setup selenium to select filters in nahayatnegar
 >
->       [ ] Add LiveTSE blog texts as template
+>       [X] Add LiveTSE blog texts as template
 >
 >       [ ] Implementing a text content update system
 >
 >       [X] Implementing image merging capability
+>
+>       [ ] Add jinja2 notations to blog template
+>
+>       [ ] Implement work date calculator system and add it to report_exporter.py
 
 > Feture:
 >
