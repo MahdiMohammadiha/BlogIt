@@ -1,4 +1,5 @@
 from flask import Flask, redirect, url_for, render_template
+from jdatetime import date
 
 
 app = Flask(__name__)
@@ -11,7 +12,9 @@ def index():
 
 @app.route("/blog")
 def blog():
-    return render_template("blog.html")
+    today = date.today()
+    jalali_date = today.strftime("%d %B %Y")
+    return render_template("blog.html", jalali_date=jalali_date)
 
 
 if __name__ == "__main__":
