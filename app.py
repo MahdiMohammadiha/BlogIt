@@ -1,41 +1,26 @@
-from flask import Flask, render_template, request
-from screenshot import take_screenshot
-import os
+from flask import Flask, redirect, url_for, render_template
+from jdatetime import date
+from report_exporter import livetse_market_report, setup_driver
 
 
 app = Flask(__name__)
 
 
-@app.route("/screenshot-panel", methods=["GET", "POST"])
+@app.route("/")
 def index():
-    screenshot_rel_path = "temp/screenshots/screenshot.png"
-    screenshot_path = os.path.join("static", screenshot_rel_path)
-    screenshot_exists = False
-    error = None
-    comment = None
+    return redirect(url_for("blog"))
 
-    if request.method == "POST":
-        url = request.form["url"]
-        selector = request.form["selector"]
-        index = request.form["index"]
 
-        if not index:
-            index = 1
+@app.route("/blog")
+def blog():
+    driver = setup_driver()
+    livetse_market_report(driver)
 
-        success, comment = take_screenshot(url, selector, screenshot_path, index)
-        if success:
-            screenshot_exists = True
-        else:
-            error = "There was a problem saving the photo."
+    today = date.today()
+    jalali_date = today.strftime("%d %B %Y")
 
-    return render_template(
-        "index.html",
-        screenshot=screenshot_rel_path if screenshot_exists else None,
-        error=error,
-        comment=comment,
-    )
+    return render_template("blog.html", jalali_date=jalali_date)
 
 
 if __name__ == "__main__":
-    os.makedirs("static/temp/screenshots", exist_ok=True)
     app.run(debug=True)
