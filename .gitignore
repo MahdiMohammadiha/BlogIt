@@ -176,3 +176,5 @@ cython_debug/
 # Temporary files
 temp/
 temp.*
+
+market_report.html
