@@ -1,0 +1,17 @@
+{
+  "tsetmc_img_path": "static/temp/screenshots/tsetmc.png",
+  "nahayatnegar_marketmap_img_path": "static/temp/screenshots/nahayatnegar_marketmap.png",
+  "market_symbols_status_img_path": "static/temp/screenshots/market_symbols_status.png",
+  "livetse_dominance_img_path": "static/temp/screenshots/livetse_dominance.png",
+  "livetse_market_sentiment_img_path": "static/temp/screenshots/livetse_market_sentiment.png",
+  "livetse_avg_buy_sell_market_img_path": "static/temp/screenshots/livetse_avg_buy_sell_market.png",
+  "livetse_net_inflow_outflow_img_path": "static/temp/screenshots/livetse_net_inflow_outflow.png",
+  "livetse_real_big_money_img_path": "static/temp/screenshots/livetse_real_big_money.png",
+  "livetse_avg_buy_sell_fixed_income_img_path": "static/temp/screenshots/livetse_avg_buy_sell_fixed_income.png",
+  "livetse_flow_fixed_income_funds_img_path": "static/temp/screenshots/livetse_flow_fixed_income_funds.png",
+  "livetse_big_money_power_img_path": "static/temp/screenshots/livetse_big_money_power.png",
+  "livetse_avg_buy_sell_commodity_funds_img_path": "static/temp/screenshots/livetse_avg_buy_sell_commodity_funds.png",
+  "livetse_flow_commodity_funds_img_path": "static/temp/screenshots/livetse_flow_commodity_funds.png",
+  "livetse_market_mood_index_img_path": "static/temp/screenshots/livetse_market_mood_index.png",
+  "livetse_market_stats_img_path": "static/temp/screenshots/livetse_market_stats.png"
+}
