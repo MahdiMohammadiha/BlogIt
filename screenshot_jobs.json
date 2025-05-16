@@ -23,7 +23,7 @@
     "url": "https://www.nahayatnegar.com/marketmap",
     "selector": "div.row.collapse.marketmap",
     "indexes": [1],
-    "output_paths": ["static/temp/screenshots/nahayatnegar.png"],
+    "output_paths": ["static/temp/screenshots/nahayatnegar_marketmap.png"],
     "delay": 5,
     "pre_actions": [
       {
