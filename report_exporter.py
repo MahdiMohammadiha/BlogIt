@@ -1,9 +1,46 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from login import login_livetse
 from time import sleep
+from typing import Literal
+
+
+# Allowed types for By
+ByType = Literal[
+    "ID",
+    "XPATH",
+    "CSS_SELECTOR",
+    "NAME",
+    "TAG_NAME",
+    "CLASS_NAME",
+    "LINK_TEXT",
+    "PARTIAL_LINK_TEXT",
+]
+
+# Allowed names for attribute
+AttrName = Literal[
+    "class",
+    "id",
+    "name",
+    "value",
+    "type",
+    "href",
+    "src",
+    "alt",
+    "title",
+    "placeholder",
+    "disabled",
+    "checked",
+    "selected",
+]
+
+
+def save_file(content: str, path: str = ".") -> None:
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
 
 
 def setup_driver():
@@ -15,7 +52,43 @@ def setup_driver():
     return driver
 
 
-def livetse_market_report():
+def click_by_element(
+    wait: WebDriverWait,
+    by_type: ByType,
+    locator: str,
+) -> WebElement:
+    by = getattr(By, by_type)
+    element = wait.until(EC.element_to_be_clickable((by, locator)))
+    element.click()
+    return element
+
+
+def wait_element_change(
+    wait: WebDriverWait,
+    element: WebElement,
+    from_value: str,
+    to_value: str,
+    from_attr: AttrName = "class",
+    to_attr: AttrName = "class",
+) -> None:
+    wait.until(
+        lambda name_must_exist: from_value not in element.get_attribute(from_attr)
+        and to_value in element.get_attribute(to_attr)
+    )
+
+
+def get_element_content(
+    wait: WebDriverWait,
+    by_type: ByType,
+    locator: str,
+) -> str:
+    by = getattr(By, by_type)
+    content = wait.until(EC.presence_of_element_located((by, locator)))
+    raw_html = content.get_attribute("outerHTML")
+    return raw_html
+
+
+def setup_livetse_notification_page():
     driver = setup_driver()
     driver.get("https://app.livetse.ir/notification?mode=export_html")
 
@@ -33,40 +106,39 @@ def livetse_market_report():
         if select_all_button.get_attribute("title") == "فعال سازی همه فیلترها":
             break
 
+    return driver
+
+
+def livetse_market_report():
+    driver = setup_livetse_notification_page()
+    wait = WebDriverWait(driver, 20)
+
     # Click the POSTMARKET button and wait for class change
-    post_market_button = wait.until(EC.element_to_be_clickable((By.ID, "POSTMARKET")))
-    post_market_button.click()
-    wait.until(
-        lambda d: "standard" in post_market_button.get_attribute("class")
-        and "red" not in post_market_button.get_attribute("class")
-    )
+    element = click_by_element(wait, "ID", "POSTMARKET")
+    wait_element_change(wait, element, "red", "standard")
 
     # Get the HTML content and save it
-    element = wait.until(
-        EC.presence_of_element_located(
-            (
-                By.CSS_SELECTOR,
-                "div.overflow-auto.scrollbar.scrollbar-primary.texual_view.card-body",
-            )
-        )
-    )
+    locator = "div.overflow-auto.scrollbar.scrollbar-primary.texual_view.card-body"
+    raw_html = get_element_content(wait, "CSS_SELECTOR", locator)
 
     parrent_element = (
         '<div class="overflow-auto scrollbar scrollbar-primary texual_view card-body">'
     )
 
-    raw_html = element.get_attribute("outerHTML")
-    clean_html = (
+    data = (
         raw_html.replace(parrent_element, "")
         .replace("&lt;", "<")
         .replace("&gt;", ">")
         .replace("amp;amp;", "")
     )
 
-    with open("templates/market_report.html", "w", encoding="utf-8") as f:
-        f.write(clean_html)
+    save_file(data, "templates/market_report.html")
 
-        driver.quit()
+    driver.quit()
+
+
+def livetse_gold_notif():
+    pass
 
 
 def main():
