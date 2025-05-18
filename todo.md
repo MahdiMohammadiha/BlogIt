@@ -27,6 +27,8 @@
 >       [ ] Add auto path logic if one path and multiple indexes given
 >
 >       [ ] Implement image scale feture for smaller scales in blog.html
+>
+>       [ ] Separating selenium tools into a package
 
 > Improvement:
 >
