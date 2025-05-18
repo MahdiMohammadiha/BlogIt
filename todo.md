@@ -29,6 +29,8 @@
 >       [ ] Implement image scale feture for smaller scales in blog.html
 >
 >       [ ] Separating selenium tools into a package
+>
+>       [ ] Integration of web driver waits
 
 > Improvement:
 >
