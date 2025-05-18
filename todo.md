@@ -15,6 +15,8 @@
 >       [ ] Implement work date calculator system and add it to report_exporter.py
 >
 >       [ ] Add 2nd report extractor form LiveTSE notifications
+>
+>       [ ] Implement a root point like main.py for project execution flow
 
 > Feture:
 >
