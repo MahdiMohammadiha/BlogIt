@@ -7,6 +7,7 @@ from login import login_livetse
 from time import sleep
 from typing import Literal
 from bs4 import BeautifulSoup
+import os
 
 
 # Allowed types for By
@@ -92,6 +93,12 @@ def get_element_content(
     return raw_html
 
 
+def is_file_empty(file_path):
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"{file_path} not found.")
+    return os.stat(file_path).st_size == 0
+
+
 def livetse_setup_notification_page():
     driver = setup_driver()
     driver.get("https://app.livetse.ir/notification?mode=export_html")
@@ -120,31 +127,26 @@ def livetse_clean_html(raw_html, report_title, css_selector):
         .replace("amp;amp;", "")
         .replace("&amp;", "&")
     )
+
     html_soup = BeautifulSoup(raw_html, "html.parser")
 
-    # Delete root tag
     for tag in html_soup.select(css_selector):
         tag.unwrap()
 
-    """
-        Review required!
-    """
-    if report_title == "golden_notification_report":
-        ul = html_soup.find("ul")
-        if ul:
-            html_soup.clear()
-            html_soup.append(ul)
+    if report_title == "market_report":
+        return str(html_soup)
 
-            for li in ul.find_all("li"):
-                for tag in li.find_all(["span", "a"]):
-                    tag.unwrap()
+    ul = html_soup.find("ul")
+    if not ul:
+        return ""
 
-                li.name = "p"
+    # Extract text from li and add br
+    result_soup = BeautifulSoup("", "html.parser")
+    for li in ul.find_all("li"):
+        result_soup.append(li.get_text())
+        result_soup.append(result_soup.new_tag("br"))
 
-            for tag in html_soup.select("ul"):
-                tag.unwrap()
-
-    return str(html_soup)
+    return str(result_soup)
 
 
 def livetse_market_report():
