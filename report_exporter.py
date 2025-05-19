@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from login import login_livetse
 from time import sleep
 from typing import Literal
+from bs4 import BeautifulSoup
 
 
 # Allowed types for By
@@ -38,7 +39,10 @@ AttrName = Literal[
 ]
 
 
-def save_file(content: str, path: str = ".") -> None:
+def save_file(
+    content: str,
+    path: str = ".",
+) -> None:
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
 
@@ -46,7 +50,7 @@ def save_file(content: str, path: str = ".") -> None:
 def setup_driver():
     """Set up the Selenium WebDriver."""
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
     driver.maximize_window()
     return driver
@@ -88,7 +92,7 @@ def get_element_content(
     return raw_html
 
 
-def setup_livetse_notification_page():
+def livetse_setup_notification_page():
     driver = setup_driver()
     driver.get("https://app.livetse.ir/notification?mode=export_html")
 
@@ -109,41 +113,82 @@ def setup_livetse_notification_page():
     return driver
 
 
+def livetse_clean_html(raw_html, report_title, css_selector):
+    raw_html = (
+        raw_html.replace("&lt;", "<").replace("&gt;", ">").replace("amp;amp;", "")
+    )
+    html_soup = BeautifulSoup(raw_html, "html.parser")
+
+    # Delete root tag
+    for tag in html_soup.select(css_selector):
+        tag.unwrap()
+
+    """
+        Review required!
+    """
+    if report_title == "golden_notification_report":
+        ul = html_soup.find("ul")
+        if ul:
+            html_soup.clear()
+            html_soup.append(ul)
+
+            for li in ul.find_all("li"):
+                for tag in li.find_all(["span", "a"]):
+                    tag.unwrap()
+
+                li.name = "p"
+
+            for tag in html_soup.select("ul"):
+                tag.unwrap()
+
+    return str(html_soup)
+
+
 def livetse_market_report():
-    driver = setup_livetse_notification_page()
+    driver = livetse_setup_notification_page()
     wait = WebDriverWait(driver, 20)
 
-    # Click the POSTMARKET button and wait for class change
+    # Click the POSTMARKET button and wait for class change to green
     element = click_by_element(wait, "ID", "POSTMARKET")
     wait_element_change(wait, element, "red", "standard")
 
     # Get the HTML content and save it
-    locator = "div.overflow-auto.scrollbar.scrollbar-primary.texual_view.card-body"
-    raw_html = get_element_content(wait, "CSS_SELECTOR", locator)
+    css_selector = "div.overflow-auto.scrollbar.scrollbar-primary.texual_view.card-body"
+    raw_html = get_element_content(wait, "CSS_SELECTOR", css_selector)
 
-    parrent_element = (
-        '<div class="overflow-auto scrollbar scrollbar-primary texual_view card-body">'
-    )
-
-    data = (
-        raw_html.replace(parrent_element, "")
-        .replace("&lt;", "<")
-        .replace("&gt;", ">")
-        .replace("amp;amp;", "")
-    )
-
-    save_file(data, "templates/market_report.html")
-
+    sleep(1)
     driver.quit()
 
+    data = livetse_clean_html(raw_html, "market_report", css_selector)
+    save_file(data, "templates/market_report.html")
 
-def livetse_gold_notif():
-    pass
+
+def livetse_golden_notification_report():
+    driver = livetse_setup_notification_page()
+    wait = WebDriverWait(driver, 20)
+
+    # Click the UP_TREND, NAVASAN and TABLO_MOVEMENT buttons and wait for classes change to gold
+    buttons = ["UP_TREND", "NAVASAN", "TABLO_MOVEMENT"]
+    for button in buttons:
+        element = click_by_element(wait, "ID", button)
+        wait_element_change(wait, element, "red", "gold")
+
+    css_selector = "div.overflow-auto.scrollbar.scrollbar-primary.texual_view.card-body"
+    raw_html = get_element_content(wait, "CSS_SELECTOR", css_selector)
+
+    sleep(1)
+    driver.quit()
+
+    data = livetse_clean_html(raw_html, "golden_notification_report", css_selector)
+    save_file(data, "templates/golden_notification_report.html")
 
 
 def main():
     livetse_market_report()
     print("Market report has been successfully saved.")
+
+    livetse_golden_notification_report()
+    print("Golden notification report has been successfully saved.")
 
 
 if __name__ == "__main__":
