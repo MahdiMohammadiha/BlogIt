@@ -4,11 +4,19 @@
 >
 >       [X] Setup selenium to select filters in nahayatnegar
 >
->       [ ] Add LiveTSE blog texts as template
+>       [X] Add LiveTSE blog texts as template
 >
 >       [ ] Implementing a text content update system
 >
 >       [X] Implementing image merging capability
+>
+>       [X] Add jinja2 notations to blog template
+>
+>       [ ] Implement work date calculator system and add it to report_exporter.py
+>
+>       [ ] Add 2nd report extractor form LiveTSE notifications
+>
+>       [ ] Implement a root point like main.py for project execution flow
 
 > Feture:
 >
@@ -17,6 +25,12 @@
 >       [X] Add data type check for take_screenshot function in screenshot.py
 >
 >       [ ] Add auto path logic if one path and multiple indexes given
+>
+>       [ ] Implement image scale feture for smaller scales in blog.html
+>
+>       [ ] Separating selenium tools into a package
+>
+>       [ ] Integration of web driver waits
 
 > Improvement:
 >
@@ -47,6 +61,10 @@
 >       [X] Image index 4 & 5 & 6 in LiveTSE web site
 >
 >       [X] Function sleep() in take_screenshot() should run once for each driver session
+>
+>       [ ] Fix screenshots from LiveTSE charts when --headless option is disabled
+>
+>       [ ] Fix img html style for LiveTSE images
 
 > Note:
 >
