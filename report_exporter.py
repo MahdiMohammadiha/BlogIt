@@ -115,7 +115,10 @@ def livetse_setup_notification_page():
 
 def livetse_clean_html(raw_html, report_title, css_selector):
     raw_html = (
-        raw_html.replace("&lt;", "<").replace("&gt;", ">").replace("amp;amp;", "")
+        raw_html.replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("amp;amp;", "")
+        .replace("&amp;", "&")
     )
     html_soup = BeautifulSoup(raw_html, "html.parser")
 
