@@ -96,7 +96,7 @@ def run_image_jobs():
     return success_count, failure_count
 
 
-if __name__ == "__main__":
+def main():
     print("Running Screenshot Jobs...")
     s_success, s_failure = run_screenshot_jobs()
 
@@ -109,3 +109,7 @@ if __name__ == "__main__":
     print("\nSummary:")
     print(f"\tTotal Success: {total_success}")
     print(f"\tTotal Failures: {total_failure}")
+
+
+if __name__ == "__main__":
+    main()
