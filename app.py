@@ -33,7 +33,7 @@ def blog():
     livetse_golden_notification_report()
     main()
 
-    gold_notification = not is_file_empty("templates/golden_notification_report.html")
+    golden_notification = not is_file_empty("templates/golden_notification_report.html")
 
     blog_media_path = load_config("blog_media_path.json")
 
@@ -43,7 +43,7 @@ def blog():
     return render_template(
         "blog.html",
         jalali_date=jalali_date,
-        gold_notification=gold_notification,
+        golden_notification=golden_notification,
         **blog_media_path
     )
 
