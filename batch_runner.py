@@ -32,6 +32,7 @@ def run_screenshot_jobs():
         login_required = job.get("login_required", False)
         scroll_into_view = job.get("scroll_into_view", False)
         pre_actions = job.get("pre_actions", [])
+        window_size = job.get("window_size", [1366, 768])
 
         if not all([url, selector, output_paths]):
             print(f"Screenshot Job #{i}: Invalid job definition.")
@@ -47,6 +48,7 @@ def run_screenshot_jobs():
             login_required=login_required,
             scroll_into_view=scroll_into_view,
             pre_actions=pre_actions,
+            window_size=window_size,
         )
 
         for success, message in result:
