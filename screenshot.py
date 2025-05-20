@@ -114,16 +114,20 @@ def capture_element(
     return success, message
 
 
-def setup_deriver(url):
+def setup_deriver(url, window_size=[1366, 768]):
     options = Options()
     # options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--log-level=3")
     driver = webdriver.Chrome(options=options)
-    driver.set_window_size(2560, 1440)
+
+    if "--headless" in options.arguments:
+        driver.set_window_size(window_size[0], window_size[1])
+    else:
+        driver.maximize_window()
+
     driver.get(url)
-    driver.maximize_window()
     driver.execute_script("document.body.style.zoom='100%'")
     return driver
 
@@ -138,6 +142,7 @@ def take_screenshot(
     login_required: bool = False,
     scroll_into_view: bool = False,
     pre_actions: list[dict] = [],
+    window_size: list[int, int] = [1366, 768],
 ) -> list[tuple[bool, str]]:
 
     if not valid_inputs(
@@ -145,7 +150,7 @@ def take_screenshot(
     ):
         return [(False, "Invalid inputs.")]
 
-    with closing(setup_deriver(url)) as driver:
+    with closing(setup_deriver(url, window_size)) as driver:
         if login_required:
             LL(driver)
 
