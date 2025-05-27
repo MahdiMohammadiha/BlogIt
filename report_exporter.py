@@ -8,6 +8,8 @@ from time import sleep
 from typing import Literal
 from bs4 import BeautifulSoup
 import os
+from jdatetime import date
+import json
 
 
 # Allowed types for By
@@ -40,20 +42,38 @@ AttrName = Literal[
 ]
 
 
+def save_file_j(data, path):
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
 def save_file(
-    content: str,
+    data: str,
     path: str = ".",
 ) -> None:
+    data = str(data)
     with open(path, "w", encoding="utf-8") as f:
-        f.write(content)
+        f.write(data)
 
 
-def setup_driver():
+def jalali_date():
+    today = date.today()
+    jalali_date = today.strftime("%d %B %Y")
+
+    return str(jalali_date)
+
+
+def setup_driver(url="", window_size=[1366, 768]):
     """Set up the Selenium WebDriver."""
     options = webdriver.ChromeOptions()
     # options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
-    driver.maximize_window()
+
+    if "--headless" in options.arguments:
+        driver.set_window_size(window_size[0], window_size[1])
+    else:
+        driver.maximize_window()
+
     return driver
 
 
@@ -99,6 +119,72 @@ def is_file_empty(file_path):
     return os.stat(file_path).st_size == 0
 
 
+def tsetmc_index_report():
+    """
+    Debloat required!
+    """
+
+    # Launch the browser
+    driver = setup_driver()
+    driver.get("https://old.tsetmc.com/Loader.aspx?ParTree=15")
+
+    # Wait until the index tables are loaded
+    wait = WebDriverWait(driver, 15)
+    wait.until(EC.presence_of_element_located((By.CLASS_NAME, "table1")))
+
+    # Find all tables with class 'table1'
+    tables = driver.find_elements(By.CLASS_NAME, "table1")
+
+    # The second table contains the selected indices
+    target_table = tables[1]
+
+    # Get all table rows
+    rows = target_table.find_elements(By.TAG_NAME, "tr")
+
+    # Prepare the result dictionary
+    result = {}
+
+    # Mapping from Persian names to English keys
+    index_map = {
+        "شاخص كل": "overall_index",
+        "شاخص كل (هم وزن)": "equal_weight_index",
+        "شاخص قيمت (هم وزن)": "equal_weight_price",
+    }
+
+    # Loop through rows and extract values
+    for row in rows[1:]:
+        cols = row.find_elements(By.TAG_NAME, "td")
+
+        if not cols:
+            continue
+
+        name = cols[0].text.strip()
+        if name in index_map:
+            key = index_map[name]
+            value = cols[2].text.strip()
+            change_td = cols[3]
+            change = change_td.text.strip()
+            percent = cols[4].text.strip()
+
+            # Check if the change is positive or negative based on class
+            inner_div = change_td.find_element(By.TAG_NAME, "div")
+            change_class = inner_div.get_attribute("class")
+            is_positive = "pn" in change_class  # true if positive
+
+            result[key] = {
+                "value": value,
+                "change": change,
+                "percent": percent,
+                "is_positive": is_positive,
+            }
+
+    # Close the browser
+    driver.quit()
+
+    save_file_j(result, "templates/reports/tsetmc_index_report.json")
+    return result
+
+
 def livetse_setup_notification_page():
     driver = setup_driver()
     driver.get("https://app.livetse.ir/notification?mode=export_html")
@@ -108,8 +194,8 @@ def livetse_setup_notification_page():
     wait = WebDriverWait(driver, 20)
 
     # Click the "select all" button
-    select_all_button = wait.until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "span.select_deselect_all.select"))
+    select_all_button = click_by_element(
+        wait, "CSS_SELECTOR", "span.select_deselect_all.select"
     )
     for _ in range(3):
         select_all_button.click()
@@ -124,8 +210,8 @@ def livetse_clean_html(raw_html, report_title, css_selector):
     raw_html = (
         raw_html.replace("&lt;", "<")
         .replace("&gt;", ">")
-        .replace("amp;amp;", "")
         .replace("&amp;", "&")
+        .replace("amp;", "")
     )
 
     html_soup = BeautifulSoup(raw_html, "html.parser")
@@ -133,8 +219,9 @@ def livetse_clean_html(raw_html, report_title, css_selector):
     for tag in html_soup.select(css_selector):
         tag.unwrap()
 
-    if report_title == "market_report":
-        return str(html_soup)
+    if report_title == "livetse_market_report":
+        html_soup = str(html_soup).replace("6 اردیبهشت 1402", "{{ jalali_date }}")
+        return html_soup
 
     ul = html_soup.find("ul")
     if not ul:
@@ -146,7 +233,7 @@ def livetse_clean_html(raw_html, report_title, css_selector):
         result_soup.append(li.get_text())
         result_soup.append(result_soup.new_tag("br"))
 
-    return str(result_soup)
+    return result_soup
 
 
 def livetse_market_report():
@@ -164,8 +251,8 @@ def livetse_market_report():
     sleep(1)
     driver.quit()
 
-    data = livetse_clean_html(raw_html, "market_report", css_selector)
-    save_file(data, "templates/market_report.html")
+    data = livetse_clean_html(raw_html, "livetse_market_report", css_selector)
+    save_file(data, "templates/reports/livetse_market_report.html")
 
 
 def livetse_golden_notification_report():
@@ -184,16 +271,21 @@ def livetse_golden_notification_report():
     sleep(1)
     driver.quit()
 
-    data = livetse_clean_html(raw_html, "golden_notification_report", css_selector)
-    save_file(data, "templates/golden_notification_report.html")
+    data = livetse_clean_html(
+        raw_html, "livetse_golden_notification_report", css_selector
+    )
+    save_file(data, "templates/reports/livetse_golden_notification_report.html")
 
 
 def main():
-    livetse_market_report()
-    print("Market report has been successfully saved.")
+    # livetse_market_report()
+    # print("Market report has been successfully saved.")
 
-    livetse_golden_notification_report()
-    print("Golden notification report has been successfully saved.")
+    # livetse_golden_notification_report()
+    # print("Golden notification report has been successfully saved.")
+
+    tsetmc_index_report()
+    print("TSETMC index report has been successfully saved.")
 
 
 if __name__ == "__main__":
