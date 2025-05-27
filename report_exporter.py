@@ -64,6 +64,19 @@ def jalali_date():
     return str(jalali_date)
 
 
+def minify_html(input_path: str, output_path: str = ""):
+    if not output_path:
+        output_path = input_path
+    
+    with open(input_path, "r", encoding="utf-8") as f:
+        html_content = f.read()
+
+    minified_html = htmlmin.minify(html_content, remove_comments=True, remove_empty_space=True)
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(minified_html)
+
+
 def setup_driver(url="", window_size=[1366, 768]):
     """Set up the Selenium WebDriver."""
     options = webdriver.ChromeOptions()
