@@ -2,26 +2,41 @@
 <p><a href="https://app.livetse.ir/technical/32097828799138957/%D8%B4%D8%A7%D8%AE%D8%B5%20%D9%83%D9%84">شاخص بورس</a>
     امروز {{ jalali_date }} با 
     <!-- https://old.tsetmc.com/Loader.aspx?ParTree=15 -> شاخص کل / تغییر -->
-    {! رشد 79 هزار !}
+     {% if tsetmc_index_report["overall_index"]["is_positive"] %}
+        رشد
+     {% else %}
+        افت
+     {% endif %}
+    {{ tsetmc_index_report["overall_index"]["change"] }}
      واحدی به 
     <!-- https://old.tsetmc.com/Loader.aspx?ParTree=15 -> شاخص کل / مقدار -->
-    {! 3.170 میلیون !}
+    {{ tsetmc_index_report["overall_index"]["value"] }}
      رسید. همچنین <a
         href="https://app.livetse.ir/technical/47041908051542008/%D9%87%D9%85%20%D9%88%D8%B2%D9%86">شاخص هم وزن</a> در
     روز جاری با 
     <!-- https://old.tsetmc.com/Loader.aspx?ParTree=15 -> شاخص کل (هم وزن) / تغییر -->
-    {! رشد 18 هزار !}
+     {% if tsetmc_index_report["equal_weight_index"]["is_positive"] %}
+        رشد
+     {% else %}
+        افت
+     {% endif %}
+    {{ tsetmc_index_report["equal_weight_index"]["change"] }}
     واحدی به 
     <!-- https://old.tsetmc.com/Loader.aspx?ParTree=15 -> شاخص کل (هم وزن) / مقدار -->
-    {! 964 هزار !}
+    {{ tsetmc_index_report["equal_weight_index"]["value"] }}
     واحد و <a
     href="https://app.livetse.ir/technical/8384385859414435/%D8%B4%D8%A7%D8%AE%D8%B5%20%D9%82%D9%8A%D9%85%D8%AA%20(%D9%87%D9%85%20%D9%88%D8%B2%D9%86)">شاخص
     قیمت</a> با 
     <!-- https://old.tsetmc.com/Loader.aspx?ParTree=15 -> شاخص قیمت / تغییر -->
-    {! افت 15 هزار !}
+     {% if tsetmc_index_report["equal_weight_price"]["is_positive"] %}
+        رشد
+     {% else %}
+        افت
+     {% endif %}
+    {{ tsetmc_index_report["equal_weight_price"]["change"] }}
     واحدی به 
     <!-- https://old.tsetmc.com/Loader.aspx?ParTree=15 -> شاخص قیمت / مقدار -->
-    {! 598 هزار واحد !}
+    {{ tsetmc_index_report["equal_weight_price"]["value"] }}
     رسید.</p>
 <h2>نقشه بازار بورس امروز {{ jalali_date }}</h2>
 <p>نقشه بازار یک شمای کلی از نمادهای مورد توجه بازار، تحرکات حقوقی، گروه های مورد توجه، چرخش جریان نقدینگی و... می‌دهد.
@@ -130,7 +145,7 @@
 
 {% if golden_notification %}
     <p>
-    {% include "golden_notification_report.html" %} 
+    {% include "reports/livetse_golden_notification_report.html" %}
     </p>
 {% else %}
     <p>
@@ -144,7 +159,7 @@
     میتوانید در تالار معاملات زنده بازار را بصورت زنده رصد کنید و همراه تیم تحلیلی معامله کنید.
 </p>
 
-{% include "market_report.html" %}
+{% include "reports/livetse_market_report.html" %}
 
 <p>
     <a href="https://app.livetse.ir/livechart"><br />مشاهده زنده نمودارها<br /></a>
