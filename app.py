@@ -1,11 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, render_template_string
-from jdatetime import date
-from report_exporter import (
-    livetse_market_report,
-    livetse_golden_notification_report,
-    is_file_empty,
-)
-from batch_runner import main
+from report_exporter import main as report_exporter_main, is_file_empty, jalali_date as jt
+from batch_runner import main as batch_runner_main
 import json
 
 
@@ -29,21 +24,23 @@ def index():
 
 @app.route("/blog")
 def blog():
-    livetse_market_report()
-    livetse_golden_notification_report()
-    main()
+    report_exporter_main()
+    batch_runner_main()
 
-    golden_notification = not is_file_empty("templates/golden_notification_report.html")
+    golden_notification = not is_file_empty(
+        "templates/reports/livetse_golden_notification_report.html"
+    )
 
     blog_media_path = load_config("blog_media_path.json")
+    tsetmc_index_report = load_config("templates/reports/tsetmc_index_report.json")
 
-    today = date.today()
-    jalali_date = today.strftime("%d %B %Y")
+    jalali_date = jt()
 
     return render_template(
         "blog.html",
         jalali_date=jalali_date,
         golden_notification=golden_notification,
+        tsetmc_index_report=tsetmc_index_report,
         **blog_media_path
     )
 
