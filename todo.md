@@ -6,7 +6,7 @@
 >
 >       [X] Add LiveTSE blog texts as template
 >
->       [ ] Implementing a text content update system
+>       [X] Implementing a text content update system
 >
 >       [X] Implementing image merging capability
 >
@@ -14,9 +14,19 @@
 >
 >       [ ] Implement work date calculator system and add it to report_exporter.py
 >
->       [ ] Add 2nd report extractor form LiveTSE notifications
+>       [X] Add 2nd report extractor for LiveTSE notifications
 >
 >       [ ] Implement a root point like main.py for project execution flow
+>
+>       [ ] Implement auto media upload system
+>
+>       [ ] Implement auto blog system for WP
+>
+>       [ ] Add banner image creator function
+>
+>       [ ] Add watchlist table generator module
+>
+>       [ ] Implement error detection and skip error system
 
 > Feture:
 >
@@ -26,11 +36,15 @@
 >
 >       [ ] Add auto path logic if one path and multiple indexes given
 >
->       [ ] Implement image scale feture for smaller scales in blog.html
+>       [X] Implement image scale feature for smaller scales in blog.html
 >
 >       [ ] Separating selenium tools into a package
 >
 >       [ ] Integration of web driver waits
+>
+>       [ ] Implement minimalize html module for perfomance enhancement
+>
+>       [ ] Implement retry system for errors
 
 > Improvement:
 >
@@ -62,13 +76,11 @@
 >
 >       [X] Function sleep() in take_screenshot() should run once for each driver session
 >
->       [ ] Fix screenshots from LiveTSE charts when --headless option is disabled
+>       [X] Fix screenshots from LiveTSE charts when --headless option is disabled
 >
 >       [ ] Fix img html style for LiveTSE images
 
 > Note:
->
->       - Option "headless" is disabled in take_screenshot()
 >
 >       - Module driver.quit() replaced by closing from contextlib
 >
