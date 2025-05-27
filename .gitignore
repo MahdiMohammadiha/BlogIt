@@ -178,5 +178,4 @@ temp/
 temp.*
 
 # Daily reports
-market_report.html
-golden_notification_report.html
+reports/
