@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 import os
 from jdatetime import date
 import json
+import htmlmin
 
 
 # Allowed types for By
@@ -278,11 +279,11 @@ def livetse_golden_notification_report():
 
 
 def main():
-    # livetse_market_report()
-    # print("Market report has been successfully saved.")
+    livetse_market_report()
+    print("Market report has been successfully saved.")
 
-    # livetse_golden_notification_report()
-    # print("Golden notification report has been successfully saved.")
+    livetse_golden_notification_report()
+    print("Golden notification report has been successfully saved.")
 
     tsetmc_index_report()
     print("TSETMC index report has been successfully saved.")
