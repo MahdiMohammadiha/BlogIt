@@ -37,7 +37,7 @@ def blog():
     jalali_date = jt()
 
     return render_template(
-        "blog.html",
+        "blog.min.html",
         jalali_date=jalali_date,
         golden_notification=golden_notification,
         tsetmc_index_report=tsetmc_index_report,
