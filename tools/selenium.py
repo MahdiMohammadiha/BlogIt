@@ -1,6 +1,10 @@
 from atexit import register
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.remote.webelement import WebElement
 from typing import Literal
 
 
@@ -34,45 +38,130 @@ AttrName = Literal[
 ]
 
 
-def setup_driver(
-    url: str = "", 
-    headless: bool = True, 
-    window_size: list[int] | None = None
-) -> WebDriver:
-    """
-    Initializes and returns a Chrome WebDriver with specified options.
-    The driver will be automatically quit when the program exits.
+class ElementTools:
+    def __init__(self, wait: WebDriverWait):
+        """
+        Initialize the toolkit with a WebDriverWait instance.
 
-    Args:
-        url (str): The URL to open after initializing the driver. Defaults to an empty string.
-        headless (bool): If True, runs the browser in headless mode. Defaults to True.
-        window_size (list[int] | None): The window size [width, height] used in headless mode.
-            Defaults to [1366, 768] if not provided.
+        Args:
+            wait (WebDriverWait): An instance of WebDriverWait.
+        """
+        self.wait = wait
 
-    Returns:
-        WebDriver: An instance of Chrome WebDriver with the given configuration.
-    """
-    if window_size is None:
-        window_size = [1366, 768]
+    def click(
+        self,
+        by_type: ByType,
+        locator: str,
+    ) -> WebElement:
+        """
+        Waits until the element is clickable, clicks it, and returns it.
 
-    options = webdriver.ChromeOptions()
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--log-level=3")
+        Args:
+            by_type (str): Selector type (e.g. "CSS_SELECTOR", "ID").
+            locator (str): The selector value.
 
-    if headless:
-        options.add_argument("--headless")
+        Returns:
+            WebElement: The clicked element.
+        """
+        by = getattr(By, by_type)
+        element = self.wait.until(EC.element_to_be_clickable((by, locator)))
+        element.click()
+        return element
 
-    driver = webdriver.Chrome(options=options)
+    def get_content(
+        self,
+        by_type: ByType,
+        locator: str,
+        attr: str = "outerHTML",
+    ) -> str:
+        """
+        Waits for an element to appear and returns the specified attribute.
 
-    if headless:
-        driver.set_window_size(window_size[0], window_size[1])
-    else:
-        driver.maximize_window()
+        Args:
+            by_type (str): Selector type (e.g. "CSS_SELECTOR").
+            locator (str): The selector value.
+            attr (str): Attribute name to return (default: "outerHTML").
 
-    driver.get(url)
+        Returns:
+            str: The attribute value from the element.
+        """
+        by = getattr(By, by_type)
+        element = self.wait.until(EC.presence_of_element_located((by, locator)))
+        return element.get_attribute(attr)
 
-    # Register auto-quit at program exit
-    register(driver.quit)
+    def wait_attr_change(
+        self,
+        element: WebElement,
+        from_value: str,
+        to_value: str,
+        from_attr: str = "class",
+        to_attr: str = "class",
+    ) -> None:
+        """
+        Waits until a specific attribute on an element changes
+        from one value to another.
 
-    return driver
+        Args:
+            element (WebElement): The element to monitor.
+            from_value (str): Value that should disappear from from_attr.
+            to_value (str): Value that should appear in to_attr.
+            from_attr (str): Attribute to check for `from_value`.
+            to_attr (str): Attribute to check for `to_value`.
+        """
+        self.wait.until(
+            lambda _: from_value not in element.get_attribute(from_attr)
+            and to_value in element.get_attribute(to_attr)
+        )
+
+
+class BrowserSession:
+    def __init__(
+        self,
+        url: str = "",
+        headless: bool = True,
+        window_size: list[int] | None = None,
+        wait_timeout: float = 10,
+    ):
+        """
+        Initializes the browser session with driver, wait, and eletools.
+        The driver will be automatically quit when the program exits.
+
+        Args:
+            url (str): The URL to open after initializing the driver. Defaults to an empty string.
+            headless (bool): If True, runs the browser in headless mode. Defaults to True.
+            window_size (list[int] | None): The window size [width, height] used in headless mode.
+                Defaults to [1366, 768] if not provided.
+            wait_timeout (float): Timeout for WebDriverWait.
+        """
+        if window_size is None:
+            window_size = [1366, 768]
+
+        options = webdriver.ChromeOptions()
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--log-level=3")
+        if headless:
+            options.add_argument("--headless=new")
+
+        self.driver: WebDriver = webdriver.Chrome(options=options)
+
+        if headless:
+            self.driver.set_window_size(*window_size)
+        else:
+            self.driver.maximize_window()
+
+        if url:
+            self.driver.get(url)
+
+        # Register auto-quit at program exit
+        register(self.quit)
+
+        self.wait = WebDriverWait(self.driver, wait_timeout)
+        self.eletools = ElementTools(self.wait)
+
+    def quit(self):
+        """
+        Cleanly quit the driver.
+        """
+        if self.driver:
+            self.driver.quit()
