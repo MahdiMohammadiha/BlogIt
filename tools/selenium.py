@@ -39,7 +39,10 @@ AttrName = Literal[
 
 
 class ElementActions:
-    def __init__(self, wait: WebDriverWait):
+    def __init__(
+        self,
+        wait: WebDriverWait,
+    ):
         """
         Initialize the toolkit with a WebDriverWait instance.
 
@@ -48,12 +51,19 @@ class ElementActions:
         """
         self.wait = wait
 
-    def _get_by(self, by_type: ByType) -> str:
+    def _get_by(
+        self,
+        by_type: ByType,
+    ) -> str:
         if not hasattr(By, by_type):
             raise ValueError(f"Invalid ByType: {by_type}")
         return getattr(By, by_type)
 
-    def click(self, by_type: ByType, locator: str) -> WebElement:
+    def click(
+        self,
+        by_type: ByType,
+        locator: str,
+    ) -> WebElement:
         """
         Waits until the element is clickable, clicks it, and returns it.
 
@@ -69,7 +79,12 @@ class ElementActions:
         element.click()
         return element
 
-    def get_content(self, by_type: ByType, locator: str, attr: str = "outerHTML") -> str:
+    def get_content(
+        self,
+        by_type: ByType,
+        locator: str,
+        attr: str = "outerHTML",
+    ) -> str:
         """
         Waits for an element to appear and returns the specified attribute.
 
