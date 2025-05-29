@@ -1,8 +1,9 @@
 from flask import Flask, redirect, url_for, render_template, render_template_string
-from report_exporter import main as report_exporter_main, is_file_empty
+from report_exporter import main as report_exporter_main
 from batch_runner import main as batch_runner_main
 import json
 from tools.utils import JalaliDate
+from tools.file import is_file_empty
 
 
 app = Flask(__name__)
