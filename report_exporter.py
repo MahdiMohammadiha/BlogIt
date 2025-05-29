@@ -3,13 +3,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
+from tools.file import save_file
 from login import login_livetse
 from time import sleep
 from typing import Literal
 from bs4 import BeautifulSoup
 import os
-from jdatetime import date
-import json
 
 
 # Allowed types for By
@@ -40,20 +39,6 @@ AttrName = Literal[
     "checked",
     "selected",
 ]
-
-
-def save_file_j(data, path):
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-
-
-def save_file(
-    data: str,
-    path: str = ".",
-) -> None:
-    data = str(data)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(data)
 
 
 def setup_driver(url="", window_size=[1366, 768]):
@@ -174,7 +159,7 @@ def tsetmc_index_report():
     # Close the browser
     driver.quit()
 
-    save_file_j(result, "templates/reports/tsetmc_index_report.json")
+    save_file(result, "templates/reports/tsetmc_index_report.json")
     return result
 
 
