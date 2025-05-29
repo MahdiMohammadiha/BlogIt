@@ -56,13 +56,6 @@ def save_file(
         f.write(data)
 
 
-def jalali_date():
-    today = date.today()
-    jalali_date = today.strftime("%d %B %Y")
-
-    return str(jalali_date)
-
-
 def setup_driver(url="", window_size=[1366, 768]):
     """Set up the Selenium WebDriver."""
     options = webdriver.ChromeOptions()
