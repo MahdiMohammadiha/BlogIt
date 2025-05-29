@@ -19,7 +19,6 @@ def is_file_empty(
     Raises:
         FileNotFoundError: If the specified file does not exist.
     """
-
     path = Path(file_path)
     if not path.exists():
         raise FileNotFoundError(f"{file_path} not found.")
@@ -43,7 +42,6 @@ def save_file(
     Raises:
         TypeError: If trying to save non-serializable data as JSON.
     """
-
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -69,11 +67,7 @@ def minify_html(
         input_path (str): Path to the input HTML file.
         output_path (str | None): Path to save the minified HTML.
                                  Defaults to None, which means overwrite input file.
-
-    Returns:
-        None
     """
-
     if output_path is None:
         output_path = input_path
 
