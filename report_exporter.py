@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
-from tools.file import save_file
+from tools.file import save_file, is_file_empty
 from login import login_livetse
 from time import sleep
 from typing import Literal
@@ -89,12 +89,6 @@ def get_element_content(
     content = wait.until(EC.presence_of_element_located((by, locator)))
     raw_html = content.get_attribute("outerHTML")
     return raw_html
-
-
-def is_file_empty(file_path):
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"{file_path} not found.")
-    return os.stat(file_path).st_size == 0
 
 
 def tsetmc_index_report():
