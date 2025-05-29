@@ -38,7 +38,7 @@ AttrName = Literal[
 ]
 
 
-class ElementTools:
+class ElementActions:
     def __init__(self, wait: WebDriverWait):
         """
         Initialize the toolkit with a WebDriverWait instance.
@@ -48,44 +48,40 @@ class ElementTools:
         """
         self.wait = wait
 
-    def click(
-        self,
-        by_type: ByType,
-        locator: str,
-    ) -> WebElement:
+    def _get_by(self, by_type: ByType) -> str:
+        if not hasattr(By, by_type):
+            raise ValueError(f"Invalid ByType: {by_type}")
+        return getattr(By, by_type)
+
+    def click(self, by_type: ByType, locator: str) -> WebElement:
         """
         Waits until the element is clickable, clicks it, and returns it.
 
         Args:
-            by_type (str): Selector type (e.g. "CSS_SELECTOR", "ID").
+            by_type (ByType): Selector type (e.g. "CSS_SELECTOR", "ID").
             locator (str): The selector value.
 
         Returns:
             WebElement: The clicked element.
         """
-        by = getattr(By, by_type)
+        by = self._get_by(by_type)
         element = self.wait.until(EC.element_to_be_clickable((by, locator)))
         element.click()
         return element
 
-    def get_content(
-        self,
-        by_type: ByType,
-        locator: str,
-        attr: str = "outerHTML",
-    ) -> str:
+    def get_content(self, by_type: ByType, locator: str, attr: str = "outerHTML") -> str:
         """
         Waits for an element to appear and returns the specified attribute.
 
         Args:
-            by_type (str): Selector type (e.g. "CSS_SELECTOR").
+            by_type (ByType): Selector type (e.g. "CSS_SELECTOR").
             locator (str): The selector value.
             attr (str): Attribute name to return (default: "outerHTML").
 
         Returns:
             str: The attribute value from the element.
         """
-        by = getattr(By, by_type)
+        by = self._get_by(by_type)
         element = self.wait.until(EC.presence_of_element_located((by, locator)))
         return element.get_attribute(attr)
 
@@ -94,8 +90,8 @@ class ElementTools:
         element: WebElement,
         from_value: str,
         to_value: str,
-        from_attr: str = "class",
-        to_attr: str = "class",
+        from_attr: AttrName = "class",
+        to_attr: AttrName = "class",
     ) -> None:
         """
         Waits until a specific attribute on an element changes
@@ -105,8 +101,8 @@ class ElementTools:
             element (WebElement): The element to monitor.
             from_value (str): Value that should disappear from from_attr.
             to_value (str): Value that should appear in to_attr.
-            from_attr (str): Attribute to check for `from_value`.
-            to_attr (str): Attribute to check for `to_value`.
+            from_attr (AttrName): Attribute to check for `from_value`.
+            to_attr (AttrName): Attribute to check for `to_value`.
         """
         self.wait.until(
             lambda _: from_value not in element.get_attribute(from_attr)
@@ -157,11 +153,15 @@ class BrowserSession:
         register(self.quit)
 
         self.wait = WebDriverWait(self.driver, wait_timeout)
-        self.eletools = ElementTools(self.wait)
+        self.eletools = ElementActions(self.wait)
 
     def quit(self):
         """
-        Cleanly quit the driver.
+        Cleanly quit the driver if not already closed.
         """
         if self.driver:
-            self.driver.quit()
+            try:
+                self.driver.quit()
+            except Exception:
+                pass
+            self.driver = None
