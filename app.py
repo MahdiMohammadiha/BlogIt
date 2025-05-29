@@ -1,17 +1,11 @@
-from flask import Flask, redirect, url_for, render_template, render_template_string
+from flask import Flask, render_template, render_template_string
 from report_exporter import main as report_exporter_main
 from batch_runner import main as batch_runner_main
-import json
 from tools.utils import JalaliDate
-from tools.file import is_file_empty
+from tools.filekit import is_file_empty, load_config
 
 
 app = Flask(__name__)
-
-
-def load_config(json_path):
-    with open(json_path, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 @app.route("/")
