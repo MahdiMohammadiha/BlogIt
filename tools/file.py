@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from typing import Any
+from htmlmin import minify
 
 
 def is_file_empty(
@@ -52,3 +53,34 @@ def save_file(
     else:
         with path.open("w", encoding="utf-8") as f:
             f.write(str(data))
+
+
+def minify_html(
+    input_path: str,
+    output_path: str | None = None,
+) -> None:
+    """
+    Reads an HTML file, minifies its content by removing comments and extra spaces,
+    and writes the minified HTML to the output file.
+
+    If `output_path` is None, the input file will be overwritten.
+
+    Args:
+        input_path (str): Path to the input HTML file.
+        output_path (str | None): Path to save the minified HTML.
+                                 Defaults to None, which means overwrite input file.
+
+    Returns:
+        None
+    """
+
+    if output_path is None:
+        output_path = input_path
+
+    with open(input_path, "r", encoding="utf-8") as f:
+        html_content = f.read()
+
+    minified_html = minify(html_content, remove_comments=True, remove_empty_space=True)
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(minified_html)
