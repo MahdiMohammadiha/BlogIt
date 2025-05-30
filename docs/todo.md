@@ -79,6 +79,8 @@
 >       [X] Fix screenshots from LiveTSE charts when --headless option is disabled
 >
 >       [ ] Fix img html style for LiveTSE images
+>
+>       [ ] Fix driver errors wihle quiting flask
 
 > Note:
 >
