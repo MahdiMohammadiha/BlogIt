@@ -1,10 +1,13 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from tools.filekit import save_file
 from tools.webkit import BrowserSession
 from tools.livetse import LivetseNotificationScraper as LNS
+from tools.utils import JalaliDate
+
+
+ISO_JDATE = str(JalaliDate().iso())
 
 
 def tsetmc_index_report():
@@ -71,21 +74,21 @@ def tsetmc_index_report():
     # Close the browser
     driver.quit()
 
-    save_file(result, "templates/reports/tsetmc_index_report.json")
+    save_file(result, f"templates/reports/{ISO_JDATE}/tsetmc_index_report.json")
     return result
 
 
 def livetse_market_report() -> None:
     scraper = LNS()
     html = scraper.get_market_report()
-    save_file(html, "templates/reports/livetse_market_report.html")
+    save_file(html, f"templates/reports/{ISO_JDATE}/livetse_market_report.html")
     scraper.close()
 
 
 def livetse_golden_notification_report() -> None:
     scraper = LNS()
     html = scraper.get_golden_notification_report()
-    save_file(html, "templates/reports/livetse_golden_notification_report.html")
+    save_file(html, f"templates/reports/{ISO_JDATE}/livetse_golden_notification_report.html")
     scraper.close()
 
 
