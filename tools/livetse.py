@@ -88,7 +88,7 @@ class LivetseNotificationScraper:
             tag.unwrap()
 
         if report_title == "livetse_market_report":
-            return str(html_soup).replace("6 اردیبهشت 1402", "{{ jalali_date }}")
+            return str(html_soup).replace("6 اردیبهشت 1402", "{{ pretty_jdate }}")
 
         ul = html_soup.find("ul")
         if not ul:
