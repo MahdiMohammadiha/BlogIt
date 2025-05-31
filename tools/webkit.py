@@ -135,7 +135,7 @@ class BrowserSession:
     ):
         """
         Initializes the browser session with driver, wait, and eletools.
-        The driver will be automatically close when the program exits.
+        The driver will be automatically quit when the program exits.
 
         Args:
             url (str): The URL to open after initializing the driver. Defaults to an empty string.
@@ -164,19 +164,19 @@ class BrowserSession:
         if url:
             self.driver.get(url)
 
-        # Register auto-close at program exit
-        register(self.close)
+        # Register auto-quit at program exit
+        # register(self.quit)
 
         self.wait = WebDriverWait(self.driver, wait_timeout)
         self.eletools = ElementActions(self.wait)
 
-    def close(self):
+    def exit(self):
         """
         Cleanly close the driver if not already closed.
         """
         if self.driver:
             try:
-                self.driver.close()
+                self.driver.quit()
             except Exception:
                 pass
             self.driver = None

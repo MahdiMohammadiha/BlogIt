@@ -6,10 +6,7 @@ from time import sleep
 
 
 class LivetseNotificationScraper:
-    def __init__(
-        self,
-        wait_timeout: float = 20,
-    ):
+    def __init__(self):
         """
         Initializes a browser session and logs in to the Livetse notification page.
 
@@ -17,19 +14,21 @@ class LivetseNotificationScraper:
             wait_timeout (float): Timeout for WebDriverWait. Defaults to 20 seconds.
         """
         url = "https://app.livetse.ir/notification?mode=export_html"
-        self.session = BrowserSession(url)
-        self.driver = self.session.driver
-        self.wait = WebDriverWait(self.driver, wait_timeout)
-        self.css_selector = (
+        css_selector = (
             "div.overflow-auto.scrollbar.scrollbar-primary.texual_view.card-body"
         )
+
+        self.session = BrowserSession(url, True)
+        self.driver = self.session.driver
+        self.wait = self.session.wait
+        self.css_selector = css_selector
 
         login_livetse(self.driver)
         self._select_all_filters()
 
     def _select_all_filters(self) -> None:
         """
-        Repeatedly clicks the "select all" button until all filters are active.
+        Repeatedly clicks the "select all" button until all filters are deactive.
         """
         locator = "span.select_deselect_all.select"
         button = self.session.eletools.click("CSS_SELECTOR", locator)
@@ -126,4 +125,4 @@ class LivetseNotificationScraper:
         """
         Closes the browser session.
         """
-        self.driver.quit()
+        self.session.exit()

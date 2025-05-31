@@ -17,7 +17,7 @@ def tsetmc_index_report():
 
     # Launch the browser
     url = "https://old.tsetmc.com/Loader.aspx?ParTree=15"
-    session = BrowserSession(url)
+    session = BrowserSession(url, True)
     driver = session.driver
     wait = session.wait
 
@@ -72,7 +72,7 @@ def tsetmc_index_report():
             }
 
     # Close the browser
-    driver.quit()
+    session.exit()
 
     save_file(result, f"templates/reports/{ISO_JDATE}/tsetmc_index_report.json")
     return result

@@ -1,9 +1,8 @@
 import os
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
+from tools.webkit import BrowserSession
 from login import login_livetse as LL
 from logger import print_console as PC
 from time import sleep
@@ -114,24 +113,6 @@ def capture_element(
     return success, message
 
 
-def setup_deriver(url, window_size=[1366, 768]):
-    options = Options()
-    # options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--log-level=3")
-    driver = webdriver.Chrome(options=options)
-
-    if "--headless" in options.arguments:
-        driver.set_window_size(window_size[0], window_size[1])
-    else:
-        driver.maximize_window()
-
-    driver.get(url)
-    driver.execute_script("document.body.style.zoom='100%'")
-    return driver
-
-
 def take_screenshot(
     url: str,
     selector: str,
@@ -150,31 +131,34 @@ def take_screenshot(
     ):
         return [(False, "Invalid inputs.")]
 
-    with closing(setup_deriver(url, window_size)) as driver:
-        if login_required:
-            LL(driver)
+    session = BrowserSession(url, True, window_size)
+    driver = session.driver
 
-        if pre_actions:
-            perform_pre_actions(driver, pre_actions, timeout)
+    if login_required:
+        LL(driver)
 
-        results = []
-        is_first_screenshot = True
+    if pre_actions:
+        perform_pre_actions(driver, pre_actions, timeout)
 
-        for index, output_path in zip(indexes, output_paths):
-            success, message = capture_element(
-                driver=driver,
-                selector=selector,
-                output_path=output_path,
-                index=index,
-                timeout=timeout,
-                delay=delay,
-                scroll_into_view=scroll_into_view,
-                is_first_screenshot=is_first_screenshot,
-            )
-            is_first_screenshot = False
-            PC(FILE_NAME, message)
-            results.append((success, message))
+    results = []
+    is_first_screenshot = True
 
+    for index, output_path in zip(indexes, output_paths):
+        success, message = capture_element(
+            driver=driver,
+            selector=selector,
+            output_path=output_path,
+            index=index,
+            timeout=timeout,
+            delay=delay,
+            scroll_into_view=scroll_into_view,
+            is_first_screenshot=is_first_screenshot,
+        )
+        is_first_screenshot = False
+        PC(FILE_NAME, message)
+        results.append((success, message))
+
+    session.exit()
     return results
 
 
