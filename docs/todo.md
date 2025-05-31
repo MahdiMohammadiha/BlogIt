@@ -80,7 +80,9 @@
 >
 >       [ ] Fix img html style for LiveTSE images
 >
->       [ ] Fix driver errors wihle quiting flask
+>       [X] Fix driver errors wihle quiting flask
+>
+>       [ ] Fix webdriver auto-quit in BrowserSession calss
 
 > Note:
 >
