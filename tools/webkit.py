@@ -129,17 +129,17 @@ class BrowserSession:
     def __init__(
         self,
         url: str = "",
-        headless: bool = True,
+        headless: bool = False,
         window_size: list[int] | None = None,
         wait_timeout: float = 10,
     ):
         """
         Initializes the browser session with driver, wait, and eletools.
-        The driver will be automatically quit when the program exits.
+        The driver will be automatically close when the program exits.
 
         Args:
             url (str): The URL to open after initializing the driver. Defaults to an empty string.
-            headless (bool): If True, runs the browser in headless mode. Defaults to True.
+            headless (bool): If True, runs the browser in headless mode. Defaults to False.
             window_size (list[int] | None): The window size [width, height] used in headless mode.
                 Defaults to [1366, 768] if not provided.
             wait_timeout (float): Timeout for WebDriverWait.
@@ -164,19 +164,19 @@ class BrowserSession:
         if url:
             self.driver.get(url)
 
-        # Register auto-quit at program exit
-        register(self.quit)
+        # Register auto-close at program exit
+        register(self.close)
 
         self.wait = WebDriverWait(self.driver, wait_timeout)
         self.eletools = ElementActions(self.wait)
 
-    def quit(self):
+    def close(self):
         """
-        Cleanly quit the driver if not already closed.
+        Cleanly close the driver if not already closed.
         """
         if self.driver:
             try:
-                self.driver.quit()
+                self.driver.close()
             except Exception:
                 pass
             self.driver = None
