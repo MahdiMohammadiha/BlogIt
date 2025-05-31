@@ -45,6 +45,8 @@
 >       [ ] Implement minimalize html module for perfomance enhancement
 >
 >       [ ] Implement retry system for errors
+>
+>       [ ] Add image prefix path and move screenshots to thair report directory
 
 > Improvement:
 >
